@@ -16,7 +16,7 @@ const Callback = () => {
       console.error('Error signing in', e);
     }
     setTimeout(() => {
-      router.push('/interview')
+      router.push('/interview/manager')
     }, 1000)
   }
 

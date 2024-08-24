@@ -1,19 +1,58 @@
+'use client';
+
 import {
   createInterviewManagerRepositoryAdapterMock
 } from '@/modules/interview_manager/infrastructure/adapter/interviewManagerRepositoryAdapterMock';
 import { createInterviewManagerService } from '@/modules/interview_manager/application/service/interviewManagerService';
+import { getUser, signinRedirect, signoutRedirect } from '@/modules/auth/authService';
+import { useEffect, useState } from 'react';
+import { InterviewManager } from '@/modules/interview_manager/domain/model/interviewManager';
+import { User } from 'oidc-client-ts';
 
-const interviewManagerRepositoryPort = createInterviewManagerRepositoryAdapterMock();
-const interviewManagerService        = createInterviewManagerService(interviewManagerRepositoryPort)
+const interviewRepositoryPort = createInterviewManagerRepositoryAdapterMock();
+const interviewService        = createInterviewManagerService(interviewRepositoryPort)
 
-const InterviewManagerPage = async () => {
-  const interview = await interviewManagerService.getById('1');
+const InterviewPage = () => {
+  const [interview, setInterview] = useState<InterviewManager>()
+  const [user, setUser]           = useState<User | null>()
+
+  const loadInterview = async () => {
+    const interview = await interviewService.getById('1');
+    setInterview(interview);
+  }
+
+  const loadUser = async () => {
+    const user = await getUser();
+    setUser(user);
+  }
+
+  useEffect(() => {
+    loadInterview();
+    loadUser()
+  }, []);
 
   return (
     <div>
       <h1 className='text-4xl'>Interview Id: {interview?.id}</h1>
+      <button type="button"
+              className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100
+                 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800
+                 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+              onClick={signinRedirect}>
+        Login
+      </button>
+      {user && (
+        <button type="button"
+                className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100
+                 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800
+                 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                onClick={signoutRedirect}
+        >
+          Logout
+        </button>
+      )}
     </div>
   );
 };
 
-export default InterviewManagerPage;
+export default InterviewPage;

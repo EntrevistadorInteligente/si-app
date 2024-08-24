@@ -4,16 +4,7 @@ import { settings } from "@/modules/auth/authConfig";
 Log.setLogger(console);
 Log.setLevel(Log.DEBUG);
 
-console.log(settings)
 export const userManager = new UserManager(settings);
-
-export async function signinRedirectCallback() {
-  try {
-    return await userManager.signinRedirectCallback();
-  } catch (error) {
-    console.error('Error handling redirect callback:', error);
-  }
-}
 
 export async function signinCallback() {
   try {
