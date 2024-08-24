@@ -1,13 +1,13 @@
 import {
-  createEntrevistaRepositoryAdapterMock
-} from '@/modules/interview_manager/infrastructure/adapter/interviewRepositoryAdapterMock';
-import { createInterviewService } from '@/modules/interview_manager/application/service/interviewService';
+  createInterviewManagerRepositoryAdapterMock
+} from '@/modules/interview_manager/infrastructure/adapter/interviewManagerRepositoryAdapterMock';
+import { createInterviewManagerService } from '@/modules/interview_manager/application/service/interviewManagerService';
 
-const interviewRepositoryPort = createEntrevistaRepositoryAdapterMock();
-const interviewService        = createInterviewService(interviewRepositoryPort)
+const interviewManagerRepositoryPort = createInterviewManagerRepositoryAdapterMock();
+const interviewManagerService        = createInterviewManagerService(interviewManagerRepositoryPort)
 
-const InterviewPage = async () => {
-  const interview = await interviewService.getById('1');
+const InterviewManagerPage = async () => {
+  const interview = await interviewManagerService.getById('1');
 
   return (
     <div>
@@ -16,4 +16,4 @@ const InterviewPage = async () => {
   );
 };
 
-export default InterviewPage;
+export default InterviewManagerPage;
