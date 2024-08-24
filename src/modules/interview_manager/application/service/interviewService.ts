@@ -1,4 +1,4 @@
-import { InterviewRepositoryPort } from '@/modules/interview/domain/port/interviewRepositoryPort';
+import { InterviewRepositoryPort } from '@/modules/interview_manager/domain/port/interviewRepositoryPort';
 
 export const createInterviewService = (interviewRepositoryPort: InterviewRepositoryPort) => {
   return {

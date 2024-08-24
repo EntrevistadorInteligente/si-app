@@ -1,7 +1,7 @@
 import {
   createEntrevistaRepositoryAdapterMock
-} from '@/modules/interview/infrastructure/adapter/interviewRepositoryAdapterMock';
-import { createInterviewService } from '@/modules/interview/application/service/interviewService';
+} from '@/modules/interview_manager/infrastructure/adapter/interviewRepositoryAdapterMock';
+import { createInterviewService } from '@/modules/interview_manager/application/service/interviewService';
 
 const interviewRepositoryPort = createEntrevistaRepositoryAdapterMock();
 const interviewService        = createInterviewService(interviewRepositoryPort)

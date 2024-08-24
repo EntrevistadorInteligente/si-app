@@ -1,5 +1,5 @@
-import { InterviewRepositoryPort } from '@/modules/interview/domain/port/interviewRepositoryPort';
-import { Interview } from '@/modules/interview/domain/model/interview';
+import { InterviewRepositoryPort } from '@/modules/interview_manager/domain/port/interviewRepositoryPort';
+import { Interview } from '@/modules/interview_manager/domain/model/interview';
 
 export const createEntrevistaRepositoryAdapter = (): InterviewRepositoryPort => {
   return {
