@@ -9,12 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "flowbite": "^2.5.1",
     "flowbite-react": "^0.10.1",
+    "lucide-react": "^0.436.0",
     "next": "14.2.5",
     "oidc-client-ts": "^3.0.1",
     "react": "^18",
     "react-dom": "^18",
+    "tailwind-merge": "^2.5.2",
+    "tailwindcss-animate": "^1.0.7",
     "tailwindcss-animated": "^1.1.2"
   },
   "devDependencies": {

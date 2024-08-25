@@ -1,75 +1,80 @@
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss"
 
-const config: Config = {
+const config = {
+  darkMode: ["class"],
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-  darkMode: "class",
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
+	],
+  prefix: "",
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     extend: {
-      animationDelay: {
-        400: "400ms",
-        600: "600ms",
-        800: "800ms",
-        "3s": "3s",
-        "5s": "5s",
-        "10s": "10s",
-        "15s": "15s",
-        "20s": "20s",
-      },
-      animationDuration: {
-        400: "400ms",
-        600: "600ms",
-        800: "800ms",
-        "3s": "3s",
-        "5s": "5s",
-        "10s": "10s",
-        "15s": "15s",
-        "20s": "20s",
-      },
       colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
-          50: "#f5f6fd",
-          100: "#e3e8fc",
-          200: "#cdd5f8",
-          300: "#aeb9f3",
-          400: "#8e94eb",
-          500: "#6464df",
-          600: "#6157d4",
-          700: "#5248ba",
-          800: "#443c97",
-          900: "#3a3778",
-          950: "#232046",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
         },
       },
-      fontSize: {
-        "fluid-sm": "clamp(1rem, 1.5vw, 1.5rem)",
-        "fluid-base": "clamp(1.375rem, calc(0.95rem + 1.25vw), 1.75rem)",
-        "fluid-lg": "clamp(1.575rem, calc(1.05rem + 1.50vw), 2.25rem)",
-        "fluid-xl": "clamp(1.775rem, calc(1.15rem + 1.75vw), 2.75rem)",
-        "fluid-2xl": "clamp(1.875rem, 8vw, 5rem)",
-        "fluid-md": "clamp(1.225rem, calc(0.875rem + 1.375vw), 1.525rem)",
-        "fluid-3xl": "clamp(1.975rem, calc(1.25rem + 2.00vw), 3.25rem)",
-        "fluid-4xl": "clamp(2.075rem, calc(1.35rem + 2.25vw), 3.50rem)",
-        "fluid-5xl": "clamp(2.175rem, calc(1.45rem + 2.50vw), 3.75rem)",
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
-      boxShadow: {
-        hover: "0 0 0 5px var(--tw-shadow-color, hsla(0, 0%, 9%, 10%))",
-        button: "0 2px 6px 0 var(--tw-shadow-color, hsla(0, 0%, 9%, 15%))",
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
       },
-
-      screens: {
-        xs: "500px",
-      },
-
-      transitionTimingFunction: {
-        elastic:
-          "linear(0, 0.009, 0.035 2.1%, 0.141 4.4%, 0.723 12.9%, 0.938 16.7%, 1.017, 1.077,1.121, 1.149 24.3%, 1.159, 1.163, 1.161, 1.154 29.9%, 1.129 32.8%,1.051 39.6%, 1.017 43.1%, 0.991, 0.977 51%, 0.974 53.8%, 0.975 57.1%,0.997 69.8%, 1.003 76.9%, 1)",
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },
-  plugins: [require('tailwindcss-animated'),],
-};
-export default config;
+  plugins: [require("tailwindcss-animate")],
+} satisfies Config
+
+export default config
