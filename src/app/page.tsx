@@ -10,7 +10,7 @@ export default function Home() {
           Get started by editing&nbsp;
           <code className="font-mono font-bold">src/app/page.tsx</code>
         </p>
-        <Link href={'/interview/manager'}>Interview Manager</Link>
+        <Link href={'/interview/manager'} className="animate-fade-up animate-ease-in-out">Interview Manager</Link>
         <div
           className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
           <a
@@ -23,7 +23,7 @@ export default function Home() {
             <Image
               src="/vercel.svg"
               alt="Vercel Logo"
-              className="dark:invert"
+              className="dark:invert animate-fade-left animate-ease-in-out"
               width={100}
               height={24}
               priority
@@ -47,7 +47,7 @@ export default function Home() {
       <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
         <a
           href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 animate-jump animate-ease-in-out"
           target="_blank"
           rel="noopener noreferrer"
         >
