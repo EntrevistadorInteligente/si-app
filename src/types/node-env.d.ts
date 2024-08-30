@@ -4,6 +4,7 @@ declare namespace NodeJS {
     KC_CLIENT_SECRET: string
     KC_ISSUER: string,
     KC_REDIRECT_URI: string,
-    NEXTAUTH_URL: string
+    NEXTAUTH_URL: string,
+    NEXT_PUBLIC_API_TOKEN: string,
   }
 }

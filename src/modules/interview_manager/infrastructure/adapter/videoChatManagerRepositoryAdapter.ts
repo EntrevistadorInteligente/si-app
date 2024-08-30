@@ -1,11 +1,11 @@
 import { TokenVideoChatManager } from '../../domain/model/videoChatManager';
 import { VideoChatManagerRepositoryPort } from '../../domain/port/videoChatManagerRepositoryPort';
-const api_token =  "MDdlYzkyNjljY2M2NDQyZjg1ZTAwYjQxMDQ2OWZkMGYtMTcyMjM5NzAxMA=="
+const NEXT_PUBLIC_API_TOKEN = process.env.NEXT_PUBLIC_API_TOKEN;
 
 export const createVideoChatManagerRepositoryAdapter = (): VideoChatManagerRepositoryPort => {
   return {
     getToken: async (): Promise<TokenVideoChatManager> => {
-      if (!api_token) {
+      if (!NEXT_PUBLIC_API_TOKEN) {
         throw new Error("API token is not defined")
       }
 
@@ -15,7 +15,7 @@ export const createVideoChatManagerRepositoryAdapter = (): VideoChatManagerRepos
           {
             method: "POST",
             headers: {
-              "x-api-key": api_token,
+              "x-api-key": NEXT_PUBLIC_API_TOKEN,
               "content-type": "application/json",
             },
             body: JSON.stringify({}),

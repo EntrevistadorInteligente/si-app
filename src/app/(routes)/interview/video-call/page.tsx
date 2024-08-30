@@ -8,8 +8,7 @@ import { Button } from "@/components/ui/button"
 import { OptionsDialog } from './dialog'
 import { VideoCall } from './videoCall'
 import { InterviewerList } from './interviewerListProps '
-
-const api_token = "MDdlYzkyNjljY2M2NDQyZjg1ZTAwYjQxMDQ2OWZkMGYtMTcyMjM5NzAxMA=="
+const NEXT_PUBLIC_API_TOKEN = process.env.NEXT_PUBLIC_API_TOKEN;
 
 interface Avatar {
   avatar_id: string;
@@ -35,13 +34,13 @@ export default function Page() {
 
   useEffect(() => {
     const fetchAvatars = async () => {
-if (!api_token) {
+if (!NEXT_PUBLIC_API_TOKEN) {
         throw new Error("API token is not defined")
       }
       try {
         const response = await fetch('https://api.heygen.com/v2/avatars', {
           headers: {
-            'x-api-key': api_token,
+            'x-api-key': NEXT_PUBLIC_API_TOKEN,
           },
         })
         if (!response.ok) throw new Error('Failed to fetch avatars')
