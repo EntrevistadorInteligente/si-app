@@ -18,6 +18,9 @@ const config = {
       },
     },
     extend: {
+      boxShadow: {
+        card: "var(--box-shadow) !important",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -27,6 +30,12 @@ const config = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+        },
+        tags: {
+          blue: "hsl(var(--blue))",
+          blueForeground: "hsl(var(--blue-foreground))",
+          orange: "hsl(var(--orange))",
+          orangeForeground: "hsl(var(--orange-foreground))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
