@@ -1,7 +1,8 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from "@/components/ui/button"
-import { SquareIcon, RefreshCcw } from 'lucide-react'
+import { RefreshCcw, SquareIcon } from 'lucide-react'
 import { Configuration, NewSessionData, StreamingAvatarApi } from "@heygen/streaming-avatar"
+import * as faceapi from 'face-api.js'
 
 interface VideoCallProps {
   selectedAvatar: any;
@@ -79,9 +80,34 @@ export const VideoCall: React.FC<VideoCallProps> = ({
     initializeStreams();
   };
 
+  const loadModels = () => {
+    Promise.all([
+      faceapi.nets.tinyFaceDetector.loadFromUri('/weights'),
+      faceapi.nets.faceLandmark68Net.loadFromUri('/weights'),
+      faceapi.nets.faceRecognitionNet.loadFromUri('/weights'),
+      faceapi.nets.faceExpressionNet.loadFromUri('/weights')
+    ]).then(() => {
+      detectFace()
+    });
+  }
+
+  const detectFace = () => {
+    setInterval(async () => {
+      if (userVideoRef.current) {
+        const detections = await faceapi.detectAllFaces(userVideoRef.current,
+          new faceapi.TinyFaceDetectorOptions())
+          .withFaceLandmarks()
+          .withFaceDescriptors()
+          .withFaceExpressions();
+        console.log(detections);
+      }
+    }, 1000);
+  }
+
   useEffect(() => {
     if (userStream && userVideoRef.current) {
       userVideoRef.current.srcObject = userStream;
+      loadModels();
     }
   }, [userStream]);
 
@@ -103,11 +129,11 @@ export const VideoCall: React.FC<VideoCallProps> = ({
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
             <strong className="font-bold">Camera Error:</strong>
             <span className="block sm:inline"> {cameraError}</span>
-            <button 
-              className="absolute top-0 right-0 px-4 py-3" 
+            <button
+              className="absolute top-0 right-0 px-4 py-3"
               onClick={retryCamera}
             >
-              <RefreshCcw className="h-5 w-5 text-red-500" />
+              <RefreshCcw className="h-5 w-5 text-red-500"/>
             </button>
           </div>
         ) : (
@@ -135,11 +161,11 @@ export const VideoCall: React.FC<VideoCallProps> = ({
         )}
       </div>
       <div className="absolute bottom-4 right-4 space-x-2">
-        <Button 
-          className="bg-black text-white hover:bg-gray-800" 
+        <Button
+          className="bg-black text-white hover:bg-gray-800"
           onClick={handleEndInterview}
         >
-          <SquareIcon className="size-4 mr-2" />
+          <SquareIcon className="size-4 mr-2"/>
           End Interview
         </Button>
       </div>
