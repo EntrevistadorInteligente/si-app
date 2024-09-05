@@ -117,7 +117,7 @@ export const VideoCall: React.FC<VideoCallProps> = ({
           setFaceData((prevState) => [...prevState, ...newFaceData]);
         }
       }
-    }, 2000);
+    }, 300);
   }
 
   useEffect(() => {
