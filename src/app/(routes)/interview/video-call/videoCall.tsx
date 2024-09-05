@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Button } from "@/components/ui/button"
+import React, { useEffect, useRef, useState } from 'react'
+import { Button } from '@/components/ui/button'
 import { RefreshCcw, SquareIcon } from 'lucide-react'
-import { Configuration, NewSessionData, StreamingAvatarApi } from "@heygen/streaming-avatar"
+import { Configuration, NewSessionData, StreamingAvatarApi } from '@heygen/streaming-avatar'
 import * as faceapi from 'face-api.js'
+import { createFaceRepositoryAdapter } from '@/modules/face_proccesor/infrastructure/adapter/faceRepositoryAdapter'
+import { createFaceService } from '@/modules/face_proccesor/application/service/faceService'
 
 interface VideoCallProps {
   selectedAvatar: any;
@@ -11,6 +13,13 @@ interface VideoCallProps {
   microphoneId: string;
   onEndInterview: () => void;
 }
+
+type FaceDataState = {
+  expressions: faceapi.FaceExpressions;
+}
+
+const faceRepository = createFaceRepositoryAdapter()
+const faceService = createFaceService(faceRepository)
 
 export const VideoCall: React.FC<VideoCallProps> = ({
   selectedAvatar,
@@ -25,6 +34,7 @@ export const VideoCall: React.FC<VideoCallProps> = ({
   const [avatarStream, setAvatarStream] = useState<MediaStream | null>(null);
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [sessionData, setSessionData] = useState<NewSessionData | null>(null);
+  const [faceData, setFaceData] = useState<FaceDataState[]>([]);
   const avatarApiRef = useRef<StreamingAvatarApi | null>(null);
 
   useEffect(() => {
@@ -96,30 +106,35 @@ export const VideoCall: React.FC<VideoCallProps> = ({
       if (userVideoRef.current) {
         const detections = await faceapi.detectAllFaces(userVideoRef.current,
           new faceapi.TinyFaceDetectorOptions())
-          .withFaceLandmarks()
-          .withFaceDescriptors()
           .withFaceExpressions();
-        console.log(detections);
+        if (detections.length > 0) {
+          const newFaceData = detections
+            .map(detection => ({
+              expressions: detection.expressions
+            }))
+          setFaceData((prevState) => [...prevState, ...newFaceData]);
+        }
       }
-    }, 1000);
+    }, 2000);
   }
 
   useEffect(() => {
     if (userStream && userVideoRef.current) {
       userVideoRef.current.srcObject = userStream;
-      loadModels();
     }
   }, [userStream]);
 
   useEffect(() => {
     if (avatarStream && avatarVideoRef.current) {
       avatarVideoRef.current.srcObject = avatarStream;
+      loadModels();
     }
   }, [avatarStream]);
 
-  const handleEndInterview = () => {
+  const handleEndInterview = async () => {
     stopStreams();
     onEndInterview();
+    await faceService.save(faceData);
   };
 
   return (
