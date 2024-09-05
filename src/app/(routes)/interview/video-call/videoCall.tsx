@@ -12,6 +12,7 @@ interface VideoCallProps {
   cameraId: string;
   microphoneId: string;
   onEndInterview: () => void;
+  isAllowSave: boolean;
 }
 
 type FaceDataState = {
@@ -26,7 +27,8 @@ export const VideoCall: React.FC<VideoCallProps> = ({
   streamingToken,
   cameraId,
   microphoneId,
-  onEndInterview
+  onEndInterview,
+  isAllowSave
 }) => {
   const userVideoRef = useRef<HTMLVideoElement>(null);
   const avatarVideoRef = useRef<HTMLVideoElement>(null);
@@ -103,8 +105,8 @@ export const VideoCall: React.FC<VideoCallProps> = ({
 
   const detectFace = () => {
     setInterval(async () => {
-      if (userVideoRef.current) {
-        const detections = await faceapi.detectAllFaces(userVideoRef.current,
+      if (avatarVideoRef.current && isAllowSave) {
+        const detections = await faceapi.detectAllFaces(avatarVideoRef.current,
           new faceapi.TinyFaceDetectorOptions())
           .withFaceExpressions();
         if (detections.length > 0) {
@@ -134,7 +136,9 @@ export const VideoCall: React.FC<VideoCallProps> = ({
   const handleEndInterview = async () => {
     stopStreams();
     onEndInterview();
-    await faceService.save(faceData);
+    if (isAllowSave) {
+      await faceService.save(faceData);
+    }
   };
 
   return (
