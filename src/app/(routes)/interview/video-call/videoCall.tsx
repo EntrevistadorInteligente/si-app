@@ -105,8 +105,8 @@ export const VideoCall: React.FC<VideoCallProps> = ({
 
   const detectFace = () => {
     setInterval(async () => {
-      if (avatarVideoRef.current && isAllowSave) {
-        const detections = await faceapi.detectAllFaces(avatarVideoRef.current,
+      if (userVideoRef.current && isAllowSave) {
+        const detections = await faceapi.detectAllFaces(userVideoRef.current,
           new faceapi.TinyFaceDetectorOptions())
           .withFaceExpressions();
         if (detections.length > 0) {
