@@ -178,7 +178,7 @@ export const OptionsDialog: React.FC<OptionsDialogProps> = ({
           {cameraError && (
             <p className="text-red-500 text-sm">{cameraError}</p>
           )}
-          <div className="bg-black p-4 rounded-md w-full">
+          <div className="bg-black p-4 rounded-md w-full" hidden={!isCameraReady || !!cameraError}>
             <label className="flex items-center space-x-3 cursor-pointer">
               <Checkbox
                 id="expression-permission"
