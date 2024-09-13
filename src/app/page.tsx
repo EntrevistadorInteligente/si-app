@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import Login from '@/app/auth/components/login';
-import Logout from '@/app/auth/components/logout';
+import Login from '@/components/custom/auth/login';
+import Logout from '@/components/custom/auth/logout';
 import Link from 'next/link';
 
 export default async function Home() {

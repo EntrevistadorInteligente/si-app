@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import React, { useEffect, useState } from 'react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Checkbox } from '@/components/ui/checkbox'
 
 interface DeviceInfo {
   deviceId: string;
@@ -13,13 +14,17 @@ interface OptionsDialogProps {
   onOpenChange: (open: boolean) => void;
   selectedAvatar: any;
   onStartInterview: (cameraId: string, microphoneId: string) => void;
+  isChecked: boolean;
+  onCheckedChange: (checked: boolean) => void;
 }
 
 export const OptionsDialog: React.FC<OptionsDialogProps> = ({
   isOpen,
   onOpenChange,
   selectedAvatar,
-  onStartInterview
+  onStartInterview,
+  isChecked,
+  onCheckedChange
 }) => {
   const [cameraDevices, setCameraDevices] = useState<DeviceInfo[]>([]);
   const [microphoneDevices, setMicrophoneDevices] = useState<DeviceInfo[]>([]);
@@ -71,7 +76,7 @@ export const OptionsDialog: React.FC<OptionsDialogProps> = ({
         video: { deviceId: { exact: selectedCamera } },
         audio: false
       });
-      
+
       // We're just testing if we can get the stream, then stopping it immediately
       stream.getTracks().forEach(track => track.stop());
       setIsCameraReady(true);
@@ -117,12 +122,12 @@ export const OptionsDialog: React.FC<OptionsDialogProps> = ({
         </DialogHeader>
         <p>Are you ready to begin your AI-powered interview experience?</p>
         {selectedAvatar && (
-          <video 
-            src={selectedAvatar.preview_video_url} 
-            className="w-full rounded-lg my-4" 
-            controls 
-            autoPlay 
-            loop 
+          <video
+            src={selectedAvatar.preview_video_url}
+            className="w-full rounded-lg my-4"
+            controls
+            autoPlay
+            loop
             muted
           >
             Your browser does not support the video tag.
@@ -173,8 +178,21 @@ export const OptionsDialog: React.FC<OptionsDialogProps> = ({
           {cameraError && (
             <p className="text-red-500 text-sm">{cameraError}</p>
           )}
+          <div className="bg-black p-4 rounded-md w-full" hidden={!isCameraReady || !!cameraError}>
+            <label className="flex items-center space-x-3 cursor-pointer">
+              <Checkbox
+                id="expression-permission"
+                checked={isChecked}
+                onCheckedChange={onCheckedChange}
+                className="form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out"
+              />
+                <span className="text-gray-300 text-sm font-medium">
+                  Permitir leer mis expresiones
+                </span>
+            </label>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
-  );
+);
 };
