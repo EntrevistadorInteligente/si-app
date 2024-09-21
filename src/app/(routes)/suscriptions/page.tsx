@@ -5,6 +5,12 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 
+const NEXT_PUBLIC_PRO_ANNUAL_VARIANT_ID = process.env.NEXT_PUBLIC_PRO_ANNUAL_VARIANT_ID || '';
+const NEXT_PUBLIC_PRO_MONTHLY_VARIANT_ID = process.env.NEXT_PUBLIC_PRO_MONTHLY_VARIANT_ID || '';
+const NEXT_PUBLIC_BASIC_ANNUAL_VARIANT_ID = process.env.NEXT_PUBLIC_BASIC_ANNUAL_VARIANT_ID || '';
+const NEXT_PUBLIC_BASIC_MONTHLY_VARIANT_ID = process.env.NEXT_PUBLIC_BASIC_MONTHLY_VARIANT_ID || '';
+
+
 interface PricingPlan {
     name: string;
     features: string[];
@@ -32,11 +38,11 @@ const pricingPlans: PricingPlan[] = [
         variants: {
           monthly: {
             price: 9.99,
-            variantId: "87bc566a-5bdb-491b-9656-ce0e298a9fe6"
+            variantId: NEXT_PUBLIC_BASIC_MONTHLY_VARIANT_ID
           },
           annual: {
             price: 99.99,
-            variantId: "c5d82d42-bf16-45c4-bf8c-b6bfd855cc11"
+            variantId: NEXT_PUBLIC_BASIC_ANNUAL_VARIANT_ID
           }
         }
       },
@@ -52,11 +58,11 @@ const pricingPlans: PricingPlan[] = [
     variants: {
       monthly: {
         price: 19.99,
-        variantId: "YOUR_PRO_MONTHLY_VARIANT_ID"
+        variantId: NEXT_PUBLIC_PRO_MONTHLY_VARIANT_ID
       },
       annual: {
         price: 199.99,
-        variantId: "YOUR_PRO_ANNUAL_VARIANT_ID"
+        variantId: NEXT_PUBLIC_PRO_ANNUAL_VARIANT_ID
       }
     }
   },
@@ -128,6 +134,13 @@ declare global {
       window.location.href = `https://kahop.lemonsqueezy.com/buy/${variantId}`;
     };
 
+    const handleContactUs = () => {
+      window.location.href = 'mailto:ventas@tuempresa.com?subject=Consulta%20sobre%20Plan%20Empresarial';
+    };
+
+    // Filtrar los planes para excluir el plan Empresarial
+    const displayedPlans = pricingPlans.filter(plan => plan.name !== "Empresarial");
+
     return (
       <div className="container mx-auto py-12">
         <h1 className="text-3xl font-bold text-center mb-10">Planes de Suscripción</h1>
@@ -136,8 +149,8 @@ declare global {
           <Switch checked={isAnnual} onCheckedChange={setIsAnnual} />
           <span className="ml-2">Anual</span>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {pricingPlans.map((plan, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          {displayedPlans.map((plan, index) => (
             <Card key={index} className={`flex flex-col ${plan.recommended ? 'border-primary' : ''}`}>
               <CardHeader>
                 <CardTitle>{plan.name}</CardTitle>
@@ -164,6 +177,13 @@ declare global {
               </CardFooter>
             </Card>
           ))}
+        </div>
+        <div className="mt-12 text-center">
+          <h2 className="text-2xl font-bold mb-4">¿Necesitas un plan personalizado?</h2>
+          <p className="mb-6">Ofrecemos soluciones empresariales adaptadas a tus necesidades.</p>
+          <Button onClick={handleContactUs} className="bg-secondary text-primary">
+            Contáctanos para un Plan Empresarial
+          </Button>
         </div>
       </div>
     );
