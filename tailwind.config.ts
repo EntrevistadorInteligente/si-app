@@ -30,6 +30,8 @@ const config = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          light: "hsl(var(--primary-light))",
+          medium: "hsl(var(--primary-medium))",
         },
         tags: {
           blue: "hsl(var(--blue))",
