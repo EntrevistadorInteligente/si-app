@@ -28,6 +28,7 @@ export default function Page() {
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false)
   const [selectedCameraId, setSelectedCameraId] = useState<string>('')
   const [selectedMicrophoneId, setSelectedMicrophoneId] = useState<string>('')
+  const [allowSave, setAllowSave] = useState<boolean>(false)
 
   const videoChatRepositoryPort = createVideoChatManagerRepositoryAdapter();
   const videoChatService = createVideoChatManagerService(videoChatRepositoryPort);
@@ -94,6 +95,10 @@ if (!NEXT_PUBLIC_API_TOKEN) {
     setSelectedCameraId('')
     setSelectedMicrophoneId('')
   }
+  
+  const handleOnAllowSave = (checked: boolean) => {
+    setAllowSave(checked)
+  }
 
   if (isLoading) {
     return (
@@ -132,6 +137,7 @@ if (!NEXT_PUBLIC_API_TOKEN) {
           cameraId={selectedCameraId}
           microphoneId={selectedMicrophoneId}
           onEndInterview={handleEndInterview}
+          isAllowSave={allowSave}
         />
       )}
 
@@ -140,6 +146,8 @@ if (!NEXT_PUBLIC_API_TOKEN) {
         onOpenChange={setIsConfirmDialogOpen}
         selectedAvatar={selectedAvatar}
         onStartInterview={handleStartInterview}
+        isChecked={allowSave}
+        onCheckedChange={handleOnAllowSave}
       />
     </div>
   )
