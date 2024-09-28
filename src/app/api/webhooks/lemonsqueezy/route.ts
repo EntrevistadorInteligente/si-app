@@ -49,9 +49,6 @@ async function handleSubscriptionEvent(subscriptionData: any) {
     case 'pro':
       newRole = 'pro_subscriber';
       break;
-    case 'empresarial':
-      newRole = 'enterprise_subscriber';
-      break;
   }
 
   // Only update if the subscription is active
@@ -82,17 +79,14 @@ const userService = createUserService(userRepositoryAdapter);
 async function handleSubscriptionCreated(email: string, plan: string) {
   let newRole;
   switch (plan.toLowerCase()) {
-    case 'básico':
+    case 'basic_subscriber':
       newRole = 'basic_subscriber';
       break;
-    case 'pro':
+    case 'pro_subscriber':
       newRole = 'pro_subscriber';
       break;
-    case 'empresarial':
-      newRole = 'enterprise_subscriber';
-      break;
     default:
-      newRole = 'user';
+      newRole = 'default-roles-entrevistador';
   }
 
   try {
