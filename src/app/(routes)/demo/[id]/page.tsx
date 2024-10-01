@@ -6,11 +6,9 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '@/components/ui/skeleton'
-
-type Question = {
-  idPregunta: string
-  pregunta: string
-}
+import { createInterviewManagerRepositoryAdapter } from '@/modules/interview_manager/infrastructure/adapter/interviewManagerRepositoryAdapter'
+import { createInterviewManagerService } from '@/modules/interview_manager/application/service/interviewManagerService'
+import { Question } from '@/modules/interview_manager/domain/model/interviewManager'
 
 type Answer = {
   idPregunta: string
@@ -20,6 +18,9 @@ type Answer = {
 type Form = {
   [key: string]: string
 }
+
+const interviewManagerRepositoryAdapter = createInterviewManagerRepositoryAdapter();
+const interviewManagerService = createInterviewManagerService(interviewManagerRepositoryAdapter);
 
 export default function DemoInterviewPage({ params }: { params: { id: string } }) {
   const [questions, setQuestions] = useState<Question[]>([])
@@ -31,13 +32,26 @@ export default function DemoInterviewPage({ params }: { params: { id: string } }
   const [error, setError] = useState(false)
 
   const initializeAnswers = (questions: Question[]): Answer[] => {
-    return questions.map(question => {
-      return {
-        idPregunta: question.idPregunta,
-        respuesta: ''
-      }
-    })
+    return questions.map(question => ({
+      idPregunta: question.idPregunta,
+      respuesta: ''
+    }))
   }
+
+  useEffect(() => {
+    const getQuestions = async () => {
+      try {
+        const fetchedQuestions = await interviewManagerService.getQuestionsByRole(params.id);
+        setQuestions(fetchedQuestions);
+        setAnswers(initializeAnswers(fetchedQuestions));
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching questions: ', error);
+        setLoading(false);
+      }
+    }
+    getQuestions();
+  }, [params.id]);
 
   const handleRespuestaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newAnswers = [...answers]
@@ -76,21 +90,6 @@ export default function DemoInterviewPage({ params }: { params: { id: string } }
     setForm({})
     setError(false)
   }
-
-  useEffect(() => {
-    const getQuestions = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_DEMO_PREGUNTAS}?rol=${params.id}`)
-        const data: Question[] = await response.json()
-        setQuestions(data)
-        setAnswers(initializeAnswers(data))
-        setLoading(false)
-      } catch (error) {
-        console.error('Error fetching questions: ', error)
-      }
-    }
-    getQuestions()
-  }, [params.id])
 
   if (loading) {
     return (

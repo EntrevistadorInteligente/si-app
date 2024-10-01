@@ -1,5 +1,6 @@
-import { InterviewManager } from '@/modules/interview_manager/domain/model/interviewManager';
+import { InterviewManager, Question } from '../model/interviewManager';
 
 export interface InterviewManagerRepositoryPort {
   getById: (id: string) => Promise<InterviewManager>;
+  getQuestionsByRole: (role: string) => Promise<Question[]>;
 }
