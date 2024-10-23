@@ -50,12 +50,12 @@ const EmailSubscriptionDialog = <T extends { email: string }>({
                 <DialogContent className='sm:max-w-[425px]'>
                     <DialogHeader>
                         <DialogTitle>
-                            {emailSent ? '¡Correo enviado con éxito!' : 'Gracias por completar la entrevista'}
+                            {emailSent ? 'Email sent successfully!' : 'Thank you for completing the interview'}
                         </DialogTitle>
                         {!emailSent && (
                             <DialogDescription className='text-sm text-gray-500 text-justify'>
-                                Si deseas recibir el feedback de la entrevista, ingresa tu correo electrónico y suscríbete a nuestro
-                                boletín.
+                                If you want to receive feedback from the interview, enter your email address and subscribe to our
+                                newsletter.
                             </DialogDescription>
                         )}
                     </DialogHeader>
@@ -70,18 +70,18 @@ const EmailSubscriptionDialog = <T extends { email: string }>({
                                         id='email'
                                         type='email'
                                         className='col-span-3'
-                                        placeholder='Escribe tu correo aquí.'
+                                        placeholder='Enter your email here.'
                                         {...register('email', {
-                                            required: 'El correo es obligatorio.',
+                                            required: 'Email is required.',
                                             pattern: {
                                                 value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                                message: 'Por favor ingresa un correo válido.'
+                                                message: 'Pleas enter a valid email address.'
                                             }
                                         })}
                                     />
                                 </div>
                                 {errors.email && <p className='text-sm text-red-500'>{errors.email.message as string}</p>}
-                                {errorValidation && <p className='text-sm text-red-500'>Por favor verifica los datos ingresados.</p>}
+                                {errorValidation && <p className='text-sm text-red-500'>Please verify the entered data.</p>}
                                 <div className='flex items-center space-x-2'>
                                     <input
                                         type='checkbox'
@@ -91,22 +91,22 @@ const EmailSubscriptionDialog = <T extends { email: string }>({
                                         className='rounded border-gray-300 text-primary focus:ring-primary'
                                     />
                                     <label htmlFor='terms' className='text-sm text-gray-700'>
-                                        Acepto los{' '}
+                                        I accept the{' '}
                                         <a href='/terms-and-conditions' target='_blank' className='text-primary underline'>
-                                            términos y condiciones
+                                            terms and conditions
                                         </a>
                                     </label>
                                 </div>
                             </div>
                             <DialogFooter>
                                 <Button type='submit' disabled={!isTermsAccepted}>
-                                    Enviar email
+                                    Send email
                                 </Button>
                             </DialogFooter>
                         </form>
                     ) : (
                         <DialogFooter>
-                            <Button onClick={onClose}>Cerrar</Button>
+                            <Button onClick={onClose}>Close</Button>
                         </DialogFooter>
                     )}
                 </DialogContent>

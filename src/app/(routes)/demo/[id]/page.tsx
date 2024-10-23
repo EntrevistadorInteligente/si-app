@@ -10,7 +10,7 @@ import { createInterviewManagerRepositoryAdapter } from '@/modules/interview_man
 import { createInterviewManagerService } from '@/modules/interview_manager/application/service/interviewManagerService'
 import { Question } from '@/modules/interview_manager/domain/model/interviewManager'
 import { useForm } from 'react-hook-form'
-import EmailSubscriptionDialog from '@/components/custom/emailSubscriptionDialog'
+import EmailSubscriptionDialog from '@/components/custom/demo/emailSubscriptionDialog'
 
 type Answer = {
   idPregunta: string
