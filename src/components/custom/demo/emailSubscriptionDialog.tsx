@@ -10,21 +10,22 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { FormProvider, UseFormReturn } from 'react-hook-form'
+import { EmailForm } from '@/types/forms/email-subcription'
 
 // Make the type generic to accept the form type from the parent
-interface EmailSubscriptionDialogProps<T extends { email: string }> {
+interface EmailSubscriptionDialogProps {
     isOpen: boolean
     onClose: () => void
-    onSubmit: (data: T) => void
+    onSubmit: (data: EmailForm) => void
     emailSent: boolean
     isTermsAccepted: boolean
     setIsTermsAccepted: (value: boolean) => void
     errorValidation: boolean
-    methods: UseFormReturn<T>
+    methods: UseFormReturn<EmailForm>
 }
 
 // Use generic type parameter
-const EmailSubscriptionDialog = <T extends { email: string }>({
+const EmailSubscriptionDialog = ({
     isOpen,
     onClose,
     onSubmit,
@@ -33,14 +34,14 @@ const EmailSubscriptionDialog = <T extends { email: string }>({
     setIsTermsAccepted,
     errorValidation,
     methods
-}: EmailSubscriptionDialogProps<T>) => {
+}: EmailSubscriptionDialogProps) => {
     const {
         register,
         handleSubmit,
         formState: { errors }
     } = methods
 
-    const handleFormSubmit = (formData: T) => {
+    const handleFormSubmit = (formData: EmailForm) => {
         onSubmit(formData)
     }
 

@@ -11,6 +11,7 @@ import { createInterviewManagerService } from '@/modules/interview_manager/appli
 import { Question } from '@/modules/interview_manager/domain/model/interviewManager'
 import { useForm } from 'react-hook-form'
 import EmailSubscriptionDialog from '@/components/custom/demo/emailSubscriptionDialog'
+import { EmailForm } from '@/types/forms/email-subcription'
 
 type Answer = {
   idPregunta: string
@@ -37,7 +38,7 @@ export default function DemoInterviewPage({ params }: { params: { id: string } }
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [emailSent, setEmailSent] = useState(false);
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
-  const methods = useForm<Form>(); // Definimos el hook useForm
+  const methods = useForm<EmailForm>(); // Definimos el hook useForm
   // Nuevo estado para términos
 
   const initializeAnswers = (questions: Question[]): Answer[] => {
@@ -87,7 +88,7 @@ export default function DemoInterviewPage({ params }: { params: { id: string } }
     }
   }
 
-  const onSubmit = (data: Form) => {
+  const onSubmit = (data: EmailForm) => {
     sendEmail(data.email); // Pasa el correo como parámetro
   }
 
