@@ -9,15 +9,19 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { createInterviewManagerRepositoryAdapter } from '@/modules/interview_manager/infrastructure/adapter/interviewManagerRepositoryAdapter'
 import { createInterviewManagerService } from '@/modules/interview_manager/application/service/interviewManagerService'
 import { Question } from '@/modules/interview_manager/domain/model/interviewManager'
+import { useForm } from 'react-hook-form'
+import EmailSubscriptionDialog from '@/components/custom/demo/emailSubscriptionDialog'
+import { EmailForm } from '@/types/forms/email-subcription'
 
 type Answer = {
   idPregunta: string
   respuesta: string
 }
 
-type Form = {
-  [key: string]: string
-}
+  type Form = {
+    email: string
+    [key: string]: string
+  }
 
 const interviewManagerRepositoryAdapter = createInterviewManagerRepositoryAdapter();
 const interviewManagerService = createInterviewManagerService(interviewManagerRepositoryAdapter);
@@ -30,6 +34,12 @@ export default function DemoInterviewPage({ params }: { params: { id: string } }
   const [formularioCompleto, setFormularioCompleto] = useState(false)
   const [form, setForm] = useState({})
   const [error, setError] = useState(false)
+  const [errorValidation] = useState(false)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [emailSent, setEmailSent] = useState(false);
+  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+  const methods = useForm<EmailForm>(); // Definimos el hook useForm
+  // Nuevo estado para términos
 
   const initializeAnswers = (questions: Question[]): Answer[] => {
     return questions.map(question => ({
@@ -78,9 +88,30 @@ export default function DemoInterviewPage({ params }: { params: { id: string } }
     }
   }
 
+  const onSubmit = (data: EmailForm) => {
+    sendEmail(data.email); // Pasa el correo como parámetro
+  }
+
+  const sendEmail = (email: string) => {
+    if (!isTermsAccepted) {
+      setError(true);
+      return;
+    }
+    console.log('Enviando feedback a:', email);
+    setFormularioCompleto(true);
+    setTimeout(() => {
+      setEmailSent(true);
+    }, 1000);
+  }
+
+
   const generateFeedback = () => {
-    console.log('Generando feedback para:', form)
-    // Aquí iría la lógica para generar el feedback
+    if (!emailSent) {
+      setIsDialogOpen(true)
+    } else {
+      console.log('Generando feedback para:', form)
+      // Aquí iría la lógica para generar el feedback
+    }
   }
 
   const tryAgain = () => {
@@ -116,60 +147,73 @@ export default function DemoInterviewPage({ params }: { params: { id: string } }
   }
 
   return (
-    <div className='container mx-auto p-4 flex flex-col justify-center min-h-screen'>
-      <h1 className='sm:text-4xl text-2xl font-bold text-center mb-16 w-fit max-w-[470px] mx-auto text-primary'>
-        <span className='capitalize bg-gradient-to-r from-[#12C2E9] to-[#C471ED] bg-clip-text text-transparent'>
-          {params.id}
-        </span>{' '}
-        interview, please answer the questions.
-      </h1>
-      <Card className='w-full max-w-2xl mx-auto mb-4 rounded-2xl shadow-card border-none'>
-        <CardContent className='p-6'>
-          {!formularioCompleto ? (
-            <>
-              <p className='font-bold mb-4 text-primary'>
-                {questions[currentQuestion]?.pregunta || 'Cargando preguntas...'}
-              </p>
-              <p className='text-primary-medium font-semibold mb-2 text-base'>Answer:</p>
-              <Textarea
-                placeholder='Write your answer here.'
-                value={answers[currentQuestion]?.respuesta}
-                onChange={handleRespuestaChange}
-                className={cn('min-h-[100px] mb-4 max-h-[380px]', error && 'border-red-500 focus-visible:ring-red-500')}
-                aria-invalid={error}
-                aria-describedby={error ? 'error-message' : undefined}
-              />
-              {error && (
-                <p id='error-message' className='text-red-500 text-sm mb-4'>
-                  Please answer the question before continuing.
+    <>
+      <div className='container mx-auto p-4 flex flex-col justify-center min-h-screen'>
+        <h1 className='sm:text-4xl text-2xl font-bold text-center mb-16 w-fit max-w-[470px] mx-auto text-primary'>
+          <span className='capitalize bg-gradient-to-r from-[#12C2E9] to-[#C471ED] bg-clip-text text-transparent'>
+            {params.id}
+          </span>{' '}
+          interview, please answer the questions.
+        </h1>
+        <Card className='w-full max-w-2xl mx-auto mb-4 rounded-2xl shadow-card border-none'>
+          <CardContent className='p-6'>
+            {!formularioCompleto ? (
+              <>
+                <p className='font-bold mb-4 text-primary'>
+                  {questions[currentQuestion]?.pregunta || 'Cargando preguntas...'}
                 </p>
-              )}
-              <div className='flex justify-between'>
-                <div className='flex'>
-                  <span className='text-sm font-medium self-end text-primary-medium'>
-                    {currentQuestion + 1}/{questions.length || '5'}
-                  </span>
+                <p className='text-primary-medium font-semibold mb-2 text-base'>Answer:</p>
+                <Textarea
+                  placeholder='Write your answer here.'
+                  value={answers[currentQuestion]?.respuesta}
+                  onChange={handleRespuestaChange}
+                  className={cn('min-h-[100px] mb-4 max-h-[380px]', error && 'border-red-500 focus-visible:ring-red-500')}
+                  aria-invalid={error}
+                  aria-describedby={error ? 'error-message' : undefined}
+                />
+                {error && (
+                  <p id='error-message' className='text-red-500 text-sm mb-4'>
+                    Please answer the question before continuing.
+                  </p>
+                )}
+                <div className='flex justify-between'>
+                  <div className='flex'>
+                    <span className='text-sm font-medium self-end text-primary-medium'>
+                      {currentQuestion + 1}/{questions.length || '5'}
+                    </span>
+                  </div>
+                  <Button onClick={enviarRespuesta} className='bg-primary'>
+                    Send answer
+                  </Button>
                 </div>
-                <Button onClick={enviarRespuesta} className='bg-primary'>
-                  Send answer
-                </Button>
+              </>
+            ) : (
+              <div className='flex flex-col items-center gap-4 justify-center'>
+                <p className='text-lg font-bold'>¡You have completed all the questions!</p>
+                <div className='flex gap-4 justify-center'>
+                  <Button onClick={tryAgain} variant='outline' className='w-full'>
+                    Answer again
+                  </Button>
+                  <Button onClick={generateFeedback} className='bg-primary w-full'>
+                    Generate feedback
+                  </Button>
+                </div>
               </div>
-            </>
-          ) : (
-            <div className='flex flex-col items-center gap-4 justify-center'>
-              <p className='text-lg font-bold'>¡You have completed all the questions!</p>
-              <div className='flex gap-4 justify-center'>
-                <Button onClick={tryAgain} variant='outline' className='w-full'>
-                  Answer again
-                </Button>
-                <Button onClick={generateFeedback} className='bg-primary w-full'>
-                  Generate feedback
-                </Button>
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+      {/* Dialog para pedir el email */}
+      <EmailSubscriptionDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        onSubmit={onSubmit}
+        emailSent={emailSent}
+        isTermsAccepted={isTermsAccepted}
+        setIsTermsAccepted={setIsTermsAccepted}
+        errorValidation={errorValidation}
+        methods={methods}
+      />
+    </>
   )
 }
